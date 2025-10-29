@@ -1,5 +1,3 @@
-
-
 # Ameikai 's 板子
 
 ## 基础
@@ -17,20 +15,29 @@ cout.tie(0);
 只能读int,long long类
 
 ```c++
-inline ll read()
-{
-    ll s = 0, w = 1;
-    char ch = getchar();
-    while (ch > '9' || ch < '0')
-    {
-        if (ch == '-')
-            w = -1;
-        ch = getchar();
-    }
-    while (ch <= '9' && ch >= '0')
-        s = (s << 1) + (s << 3) + (ch ^ 48), ch = getchar();
-    return s * w;
-}
+#ifdef __linux__
+#define gc getchar_unlocked
+#define pc putchar_unlocked
+#else
+#define gc _getchar_nolock
+#define pc _putchar_nolock
+#endif
+inline bool blank(const char x) {return !(x^32)||!(x^10)||!(x^13)||!(x^9);}
+template<typename Tp> inline void read(Tp &x) {x=0; register bool z=true; register char a=gc(); for(;!isdigit(a);a=gc()) if(a=='-') z=false; for(;isdigit(a);a=gc()) x=(x<<1)+(x<<3)+(a^48); x=(z?x:~x+1);}
+inline void read(double &x) {x=0.0; register bool z=true; register double y=0.1; register char a=gc(); for(;!isdigit(a);a=gc()) if(a=='-') z=false; for(;isdigit(a);a=gc()) x=x*10+(a^48); if(a!='.') return x=z?x:-x,void(); for(a=gc();isdigit(a);a=gc(),y/=10) x+=y*(a^48); x=(z?x:-x);}
+inline void read(char &x) {for(x=gc();blank(x)&&(x^-1);x=gc());}
+inline void read(char *x) {register char a=gc(); for(;blank(a)&&(a^-1);a=gc()); for(;!blank(a)&&(a^-1);a=gc()) *x++=a; *x=0;}
+inline void read(string &x) {x=""; register char a=gc(); for(;blank(a)&&(a^-1);a=gc()); for(;!blank(a)&&(a^-1);a=gc()) x+=a;}
+template<typename T,typename ...Tp> inline void read(T &x,Tp &...y) {read(x),read(y...);}
+template<typename Tp> inline void write(Tp x) {if(!x) return pc(48),void(); if(x<0) pc('-'),x=~x+1; register int len=0; register char tmp[64]; for(;x;x/=10) tmp[++len]=x%10+48; while(len) pc(tmp[len--]);}
+inline void write(const double x) {register int a=6; register double b=x,c=b; if(b<0) pc('-'),b=-b,c=-c; register double y=5*powl(10,-a-1); b+=y,c+=y; register int len=0; register char tmp[64]; if(b<1) pc(48); else for(;b>=1;b/=10) tmp[++len]=floor(b)-floor(b/10)*10+48; while(len) pc(tmp[len--]); pc('.'); for(c*=10;a;a--,c*=10) pc(floor(c)-floor(c/10)*10+48);}
+inline void write(const pair<int,double>x) {register int a=x.first; if(a<7) {register double b=x.second,c=b; if(b<0) pc('-'),b=-b,c=-c; register double y=5*powl(10,-a-1); b+=y,c+=y; register int len=0; register char tmp[64]; if(b<1) pc(48); else for(;b>=1;b/=10) tmp[++len]=floor(b)-floor(b/10)*10+48; while(len) pc(tmp[len--]); a&&(pc('.')); for(c*=10;a;a--,c*=10) pc(floor(c)-floor(c/10)*10+48);} else cout<<fixed<<setprecision(a)<<x.second;}
+inline void write(const char x) {pc(x);}
+inline void write(const bool x) {pc(x?49:48);}
+inline void write(char *x) {fputs(x,stdout);}
+inline void write(const char *x) {fputs(x,stdout);}
+inline void write(const string &x) {fputs(x.c_str(),stdout);}
+template<typename T,typename ...Tp> inline void write(T x,Tp ...y) {write(x),write(y...);}
 ```
 
 
@@ -159,18 +166,18 @@ int cnt = 0;
 void euler()
 {
     isprime[0] = isprime[1] = 1;
-    for (int i = 2; i <= n; i++)
+    for (int i = 2; i <= N; i++)
     {
         if (!isprime[i])
             prime[++cnt] = i;
-        for (int j = 1; j <= cnt && i * prime[j] <= n; j++)
+        for (int j = 1; j <= cnt && i * prime[j] <= N; j++)
         {
             isprime[i * prime[j]] = 1;
             if (i % prime[j] == 0)
                 break;
         }
     }
-}
+}                                          
 ```
 
 ### 中国剩余定理
@@ -237,6 +244,97 @@ int main()
     return 0;
 }
 ```
+
+
+
+### 组合数
+
+```c++
+const int MOD = 998244353;
+const int N = 4e6 + 5;
+int qpow(int a, int b)
+{
+    int res = 1;
+    while (b)
+    {
+        if (b & 1)
+            res = res * a % MOD;
+        a = a * a % MOD, b >>= 1;
+    }
+    return res;
+}
+int getinv(int x) { return qpow(x, MOD - 2); }
+int fact[N], inv_fact[N];
+int inv[N];
+void init_comb(int n)
+{
+    fact[0] = 1;
+    for (int i = 1; i <= n; i++)
+        fact[i] = fact[i - 1] * i % MOD;
+    inv_fact[n] = getinv(fact[n]);
+    for (int i = n; i >= 1; i--)
+        inv_fact[i - 1] = inv_fact[i] * i % MOD;
+    inv[1] = 1;
+    for (int i = 2; i <= n; i++)
+        inv[i] = (MOD - MOD / i) * inv[MOD % i] % MOD;
+    return;
+}
+int comb(int n, int m)
+{
+    if (m > n)
+        return 0;
+    else if (m == 0 || m == n)
+        return 1;
+    else
+        return fact[n] * inv_fact[m] % MOD * inv_fact[n - m] % MOD;
+}
+```
+
+
+
+### 逆序数
+
+
+
+~~~cpp
+class FenwickTree//0-base
+{
+public:
+    int n;
+    vector<int> fen;
+    FenwickTree(int n) : n(n), fen(n + 1) {}
+    void upd(int x)
+    {
+        while (x <= n)
+        {
+            fen[x]++;
+            x += x & -x;
+        }
+    }
+    int que(int x)
+    {
+        int ans = 0;
+        while (x)
+        {
+            ans += fen[x];
+            x -= x & -x;
+        }
+        return ans;
+    }
+    int f(vector<int> x)
+    {
+        ff(i, 0, n) fen[i] = 0;
+        int ans = 0;
+        ffg(i, x.size() - 1, 0)
+        {
+            ans += que(x[i]);
+            upd(x[i]);
+        }
+
+        return ans;
+    }
+};
+~~~
 
 
 
@@ -575,7 +673,7 @@ int main()
 
 这种题目看起来很吓人，可是只要领悟了前面几种背包的中心思想，并将其合并在一起就可以了。下面给出伪代码：
 
-```
+```c++
 for (循环物品种类) 
 {
   if (是 0 - 1 背包)
@@ -700,7 +798,7 @@ void solve()
 
 #### 树上背包
 
-**现在有 n 门课程，第 i 门课程的学分为 a_i，每门课程有零门或一门先修课，有先修课的课程需要先学完其先修课，才能学习该课程。**
+**现在有 n 门课程，第 i 门课程的学分为a_i，每门课程有零门或一门先修课，有先修课的课程需要先学完其先修课，才能学习该课程。**
 
 **一位学生要学习 m 门课程，求其能获得的最多学分数。**
 
@@ -806,6 +904,72 @@ int main()
     }
     return 0;
 }
+
+template <typename T>
+class ST1
+{
+public: // 记得加上public
+    int n;
+    vector<vector<T>> st;
+    ST1(vector<T> &a = {}) : n((int)a.size())
+    {
+        st = vector<vector<T>>(n + 1, vector<T>(22 + 1));
+        build(n, a);
+    }
+    inline T get(const T &a, const T &b) const { return min(a, b); };
+    void build(int n, vector<T> &a)
+    {
+        for (int i = 1; i <= n; i++)
+            st[i][0] = a[i];
+        for (int p = 1, t = 2; t <= n; t <<= 1, p++)
+        {
+            for (int i = 1; i <= n; i++)
+            {
+                if (i + t - 1 > n)
+                    break;
+                st[i][p] = min(st[i][p - 1], st[i + (t >> 1)][p - 1]);
+            }
+        }
+    }
+    inline T find(int l, int r)
+    {
+        int t = (int)log2(r - l + 1);
+        return get(st[l][t], st[r - (1 << t) + 1][t]);
+    }
+};
+
+template <typename T>
+class ST2
+{
+public: // 记得加上public
+    int n;
+    vector<vector<T>> st;
+    ST2(vector<T> &a = {}) : n((int)a.size())
+    {
+        st = vector<vector<T>>(n + 1, vector<T>(22 + 1));
+        build(n, a);
+    }
+    inline T get(const T &a, const T &b) const { return max(a, b); };
+    void build(int n, vector<T> &a)
+    {
+        for (int i = 1; i <= n; i++)
+            st[i][0] = a[i];
+        for (int p = 1, t = 2; t <= n; t <<= 1, p++)
+        {
+            for (int i = 1; i <= n; i++)
+            {
+                if (i + t - 1 > n)
+                    break;
+                st[i][p] = max(st[i][p - 1], st[i + (t >> 1)][p - 1]);
+            }
+        }
+    }
+    inline T find(int l, int r)
+    {
+        int t = (int)log2(r - l + 1);
+        return get(st[l][t], st[r - (1 << t) + 1][t]);
+    }
+};
 ```
 
 
@@ -855,7 +1019,7 @@ void init(int n)
 }
 ```
 
-#### 拓扑排序
+### 拓扑排序
 
 **给你一个食物网，你要求出这个食物网中最大食物链的数量。**
 
@@ -906,9 +1070,9 @@ signed main()
 }
 ```
 
-#### 最小生成树
+### 最小生成树
 
-##### Prim 算法
+#### Prim 算法
 
 ```c++
 // 使用二叉堆优化的 Prim 算法。
@@ -974,7 +1138,7 @@ int main()
 
 
 
-##### Kruskal
+#### Kruskal
 
 ```c++
 struct Edge
@@ -1028,7 +1192,7 @@ int main()
 
 
 
-#### DP 求最长（短）路
+### DP 求最长（短）路
 
 ```c++
 struct edge
@@ -1083,10 +1247,9 @@ void dp(int s)
 
 
 
-#### Dijkstra
+### Dijkstra
 
 ```c++
-
 #include <bits/stdc++.h>
 using namespace std;
 typedef pair<int, int> pii; // 存储 {距离, 节点}
@@ -1141,9 +1304,9 @@ int main()
 
 
 
-#### 树状数组
+### 树状数组
 
-##### 单点修改，区域查询
+#### 单点修改，区域查询
 
 ```c++
 ll n, m;
@@ -1194,7 +1357,7 @@ void solve()
 
 
 
-##### 区域修改，单点查询
+#### 区域修改，单点查询
 
 ```c++
 ll n, m;
@@ -1250,7 +1413,83 @@ void solve()
 
 
 
-#### 线段树
+
+
+```c++
+struct Fenwick {
+    //1 - index
+    int n;
+    std::vector<i64> t;
+ 
+    Fenwick(int n_ = 0, int a = 0) : t(n_ + 1, a), n(n_) {}
+ 
+    Fenwick(std::vector<int> a) : t(a.size()), n(a.size() - 1) {
+        for (int i = 1; i <= n; i++) {
+            t[i] += a[i];
+ 
+            int j = i + Lowbit(i);
+            if (j <= n) {
+                t[j] += t[i];
+            }
+        }
+    }
+ 
+    void operator=(const std::vector<int>& a) {
+        t.clear();
+        t.resize(a.size());
+        n = a.size() - 1;
+ 
+        for (int i = 1; i <= n; i++) {
+            t[i] += a[i];
+ 
+            int j = i + Lowbit(i);
+            if (j <= n) {
+                t[j] += t[i];
+            }
+        }
+    }
+ 
+    void clear() {
+        n = 0;
+        t.clear();
+    }
+ 
+    void resize(int x) {
+        n = x;
+        t.resize(x);
+    }
+ 
+    int Lowbit(int x) {
+        return x & -x;
+    }
+ 
+    void Add(int x, int k) {
+        while (x <= n) {
+            t[x] += k;
+            x += Lowbit(x);
+        }
+    }
+ 
+    i64 Prefix(int x) {
+        i64 sum = 0;
+        while (x > 0) {
+            sum += t[x];
+            x -= Lowbit(x);
+        }
+ 
+        return sum;
+    }
+ 
+    i64 RangeSum(int l, int r) {
+        return Prefix(r) - Prefix(l - 1);
+    }
+};
+ 
+```
+
+
+
+### 线段树
 
 ```c++
 // 区域操作都用if,单点操作用if else
@@ -1452,6 +1691,132 @@ void solve()
 ```
 
 
+
+## 计算几何
+
+
+
+### 【模板】二维凸包
+
+#### Graham
+
+```c++
+using i64 = long long;
+
+constexpr long double eps = 1e-6;
+
+class Point
+{
+public:
+    long double x, y;
+    Point(long double a = 0, long double b = 0) : x(a), y(b) {}
+    bool operator<(const Point &p) { return x != p.x ? x < p.x : y < p.y; }
+    Point operator+(const Point &p) { return Point(x + p.x, y + p.y); }
+    Point operator-(const Point &p) { return Point(x - p.x, y - p.y); }
+    long double len() { return sqrtl(x * x + y * y); }
+    long double operator*(const Point &p) { return x * p.x + y * p.y; }
+    long double Angle(Point &p) { return acos((*this) * p / (len() * p.len())); }
+    long double OuterProduct(Point p) { return x * p.y - p.x * y; }
+    bool same(Point &p) { return x == p.x && y == p.y; }
+    long long dis(Point &p) { return ((x - p.x) * (x - p.x) + (y - p.y) * (y - p.y)); }
+    long double dis2(Point &p) { return sqrtl((x - p.x) * (x - p.x) + (y - p.y) * (y - p.y)); }
+    long double area(Point &p1, Point &p2) { return abs((p1 - (*this)).OuterProduct(p2 - p1)) / 2; }
+    friend istream &operator>>(istream &in, Point &p) { in >> p.x >> p.y; return in; }
+    friend ostream &operator<<(ostream &out, const Point &p) { out << p.x << " " << p.y; return out; }
+};
+
+class ConvexHull
+{
+public:
+    vector<Point> p;
+    ConvexHull(vector<Point> &_p)
+    {
+        int n = _p.size();
+        sort(_p.begin(), _p.end(), [&](const Point &p1, const Point &p2)
+             { return p1.x != p2.x ? p1.x < p2.x : p1.y < p2.y; });
+        vector<int> vis(n), stk;
+        stk.push_back(0);
+        p.push_back(_p[0]);
+        for (int i = 1; i < n; i++)
+        {
+            while (stk.size() >= 2 && (_p[stk.back()] - _p[stk[stk.size() - 2]])
+                                              .OuterProduct(_p[i] - _p[stk.back()]) <= eps)
+            {
+                vis[stk.back()] = 0;
+                stk.pop_back();
+                p.pop_back();
+            }
+            vis[i] = 1;
+            stk.push_back(i);
+            p.push_back(_p[i]);
+        }
+
+        int low = stk.size();
+        for (int i = n - 2; i >= 0; i--)
+        {
+            if (!vis[i])
+            {
+                while (stk.size() > low && (_p[stk.back()] - _p[stk[stk.size() - 2]])
+                                                   .OuterProduct(_p[i] - _p[stk.back()]) <= eps)
+                {
+                    vis[stk.back()] = 0;
+                    stk.pop_back();
+                    p.pop_back();
+                }
+                vis[i] = 1;
+                stk.push_back(i);
+                p.push_back(_p[i]);
+            }
+        }
+    }
+    long long diameter()
+    {
+        if (p.size() <= 3)
+        {
+            return p[0].dis(p[1]);
+        }
+        else
+        {
+            long long ans = 0;
+            int j = 2;
+            for (int i = 0; i < p.size() - 1; i++)
+            {
+                while (p[j].area(p[i], p[i + 1]) <= p[j % (p.size() - 1) + 1].area(p[i], p[i + 1]))
+                {
+                    j = j % (p.size() - 1) + 1;
+                }
+
+                ans = max(ans, (i64)max(p[i].dis(p[j]), p[i + 1].dis(p[j])));
+            }
+
+            return ans;
+        }
+    }
+
+    long double length()
+    {
+        double ans = 0;
+        for (int i = 0; i < p.size(); ++i)
+        {
+            // cout << p[i] << endl;
+            ans += p[i].dis2(p[(i + 1) % p.size()]);
+        }
+        return ans;
+    }
+
+    long double area()
+    {
+        long double a = 0;
+        int m = p.size();
+        for (int i = 0; i < m; ++i)
+        {
+            a += p[i].x * p[(i + 1) % m].y - p[(i + 1) % m].x * p[i].y;
+        }
+        return abs(a) / 2.0;
+    }
+};
+
+```
 
 ## 字符串
 
