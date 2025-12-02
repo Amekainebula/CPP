@@ -48,12 +48,12 @@ struct SegTree
     struct Node
     {
         int l, r; // 当前区间范围
-        int sum;  // 区间和 & 最大值（用于区间查询 / 单点修改）
-        int num;  // 区域修改 & 单点查询（普通做法）
-        int lazy; // lazy 标签（用于区间修改）
+        long long sum;  // 区间和 & 最大值（用于区间查询 / 单点修改）
+        long long num;  // 区域修改 & 单点查询（普通做法）
+        long long lazy; // lazy 标签（用于区间修改）
     } tree[N * 4];
 
-    int a[N + 5];
+    long long a[N + 5];
 
     // --------------------------------------------
     // 建树：初始化区间信息
@@ -61,12 +61,11 @@ struct SegTree
     void build(int i, int l, int r)
     {
         tree[i].l = l, tree[i].r = r;
-        tree[i].num = 0; // 默认无 lazy 区域修改
+        tree[i].lazy = 0; // 默认无 lazy
 
         if (l == r)
         { // 叶子节点赋值
             tree[i].sum = a[l];
-            // tree[i].maxx = a[l];
             tree[i].num = a[l];
             return;
         }
@@ -75,27 +74,29 @@ struct SegTree
         build(i << 1 | 1, mid + 1, r);
 
         tree[i].sum = (tree[i << 1].sum + tree[i << 1 | 1].sum) % mod;
-        // tree[i].maxx = max(tree[i << 1].maxx, tree[i << 1 | 1].maxx);
     }
 
     // --------------------------------------------
-    // lazy 下推
+    // lazy 下推（修复区间长度计算错误）
     // --------------------------------------------
     void push_down(int i)
     {
         if (tree[i].lazy)
         {
-            tree[i << 1].lazy += tree[i].lazy;
-            tree[i << 1].lazy %= mod;
-            tree[i << 1 | 1].lazy += tree[i].lazy;
-            tree[i << 1 | 1].lazy %= mod;
+            long long tag = tree[i].lazy;
 
-            int mid = (tree[i].l + tree[i].r) >> 1;
-            tree[i << 1].sum += tree[i].lazy * (mid - tree[i << 1].l + 1);
-            tree[i << 1].sum %= mod;
+            int L = i << 1, R = i << 1 | 1;
 
-            tree[i << 1 | 1].sum += tree[i].lazy * (tree[i << 1 | 1].r - mid);
-            tree[i << 1 | 1].sum %= mod;
+            // 左区间长度
+            long long lenL = tree[L].r - tree[L].l + 1;
+            // 右区间长度
+            long long lenR = tree[R].r - tree[R].l + 1;
+
+            tree[L].lazy = (tree[L].lazy + tag) % mod;
+            tree[R].lazy = (tree[R].lazy + tag) % mod;
+
+            tree[L].sum = (tree[L].sum + tag * lenL) % mod;
+            tree[R].sum = (tree[R].sum + tag * lenR) % mod;
 
             tree[i].lazy = 0;
         }
@@ -104,17 +105,16 @@ struct SegTree
     // --------------------------------------------
     // 带 lazy：区间加 k
     // --------------------------------------------
-    void update_range_lazy(int i, int l, int r, int k)
+    void update_range_lazy(int i, int l, int r, long long k)
     {
         if (tree[i].l >= l && tree[i].r <= r)
         {
-            tree[i].sum += k * (tree[i].r - tree[i].l + 1);
-            tree[i].sum %= mod;
-
-            tree[i].lazy += k;
-            tree[i].lazy %= mod;
+            long long len = tree[i].r - tree[i].l + 1;
+            tree[i].sum = (tree[i].sum + k * len) % mod;
+            tree[i].lazy = (tree[i].lazy + k) % mod;
             return;
         }
+
         push_down(i);
 
         if (tree[i << 1].r >= l)
@@ -128,23 +128,27 @@ struct SegTree
     // --------------------------------------------
     // 带 lazy：区间查询 sum
     // --------------------------------------------
-    int query_sum_lazy(int i, int l, int r)
+    long long query_sum_lazy(int i, int l, int r)
     {
         if (tree[i].l >= l && tree[i].r <= r)
             return tree[i].sum;
+
         if (tree[i].r < l || tree[i].l > r)
             return 0;
 
         push_down(i);
-        int ans = 0;
+
+        long long ans = 0;
         if (tree[i << 1].r >= l)
-            ans += query_sum_lazy(i << 1, l, r), ans %= mod;
+            ans = (ans + query_sum_lazy(i << 1, l, r)) % mod;
         if (tree[i << 1 | 1].l <= r)
-            ans += query_sum_lazy(i << 1 | 1, l, r), ans %= mod;
+            ans = (ans + query_sum_lazy(i << 1 | 1, l, r)) % mod;
+
         return ans;
     }
 };
 SegTree st;
+
 // 常见应用
 
 int qRrang(int x, int y)
@@ -193,12 +197,17 @@ int main()
     ios::sync_with_stdio(false);
     cin.tie(0);
     cout.tie(0);
+
     cin >> NN >> M >> R >> mod;
+
+    static long long val[N];  
+
     for (int i = 1; i <= NN; i++)
     {
-        cin >> st.a[i];
-        st.a[i] %= mod;
+        cin >> val[i];
+        val[i] %= mod;
     }
+
     for (int i = 1; i < NN; i++)
     {
         int u, v;
@@ -206,9 +215,15 @@ int main()
         g[u].push_back(v);
         g[v].push_back(u);
     }
+
     dfs1(R, 0);
     dfs2(R, R);
-    st.build(1, 1, NN);
+
+    for (int i = 1; i <= NN; i++)
+        st.a[dfn[i]] = val[i];
+
+    st.build(1， 1, NN);
+
     while (M--)
     {
         int k, x, y, z;
