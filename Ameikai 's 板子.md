@@ -12,7 +12,7 @@ cout.tie(0);
 
 ### 快读
 
-只能读int,long long类
+
 
 ```c++
 #ifdef __linux__
@@ -2118,4 +2118,5 @@ void solve()
 ```c++
 
 ```
+
 
