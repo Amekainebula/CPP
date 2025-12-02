@@ -1492,202 +1492,246 @@ struct Fenwick {
 ### 线段树
 
 ```c++
-// 区域操作都用if,单点操作用if else
-struct treeNode
+#include <bits/stdc++.h>
+
+using namespace std;
+const int N = 2e5 + 5;
+const long long INF = LLONG_MAX >> 1;
+
+struct SegTree
 {
-    int l, r;      // 都有
-    int sum, maxx; // 单点修改,区间查询
-    int num;       // 区域修改,单点查询
-    int lazy;
+    struct Node
+    {
+        int l, r;            // 当前区间范围
+        long long sum, maxx; // 区间和 & 最大值（用于区间查询 / 单点修改）
+        long long num;       // 区域修改 & 单点查询（普通做法）
+        long long lazy;      // lazy 标签（用于区间修改）
+    } tree[N * 4];
+
+    long long a[N + 5];
+
+    // --------------------------------------------
+    // 建树：初始化区间信息
+    // --------------------------------------------
+    void build(int i, int l, int r)
+    {
+        tree[i].l = l, tree[i].r = r;
+        tree[i].num = 0; // 默认无 lazy 区域修改
+
+        if (l == r)
+        { // 叶子节点赋值
+            tree[i].sum = a[l];
+            // tree[i].maxx = a[l];
+            tree[i].num = a[l];
+            return;
+        }
+        int mid = (l + r) >> 1;
+        build(i << 1, l, mid);
+        build(i << 1 | 1, mid + 1, r);
+
+        tree[i].sum = tree[i << 1].sum + tree[i << 1 | 1].sum;
+        // tree[i].maxx = max(tree[i << 1].maxx, tree[i << 1 | 1].maxx);
+    }
+
+    // --------------------------------------------
+    // 不带 lazy：区间查询 sum
+    // --------------------------------------------
+    long long query_sum(int i, int l, int r)
+    {
+        if (tree[i].l >= l && tree[i].r <= r)
+            return tree[i].sum;
+
+        long long ans = 0;
+        int mid = (tree[i].l + tree[i].r) >> 1;
+        if (tree[i].r >= l)
+            ans += query_sum(i << 1, l, r);
+        if (tree[i].l <= r)
+            ans += query_sum(i << 1 | 1, l, r);
+        return ans;
+    }
+
+    // --------------------------------------------
+    // 不带 lazy：区间查询 max
+    // --------------------------------------------
+    long long query_max(int i, int l, int r)
+    {
+        if (tree[i].l >= l && tree[i].r <= r)
+            return tree[i].maxx;
+
+        long long ans = -INF;
+        int mid = (tree[i].l + tree[i].r) >> 1;
+        if (tree[i].r >= l)
+            ans = max(ans, query_max(i << 1, l, r));
+        if (tree[i].l <= r)
+            ans = max(ans, query_max(i << 1 | 1, l, r));
+        return ans;
+    }
+
+    // --------------------------------------------
+    // 单点修改（sum & max）
+    // --------------------------------------------
+    void update_point(int i, int pos, int val)
+    {
+        if (tree[i].l == tree[i].r)
+        {
+            tree[i].sum += val;
+            tree[i].maxx += val;
+            return;
+        }
+        if (pos <= tree[i << 1].r)
+            update_point(i << 1, pos, val);
+        else
+            update_point(i << 1 | 1, pos, val);
+
+        tree[i].sum = tree[i << 1].sum + tree[i << 1 | 1].sum;
+        tree[i].maxx = max(tree[i << 1].maxx, tree[i << 1 | 1].maxx);
+    }
+
+    // --------------------------------------------
+    // 区域修改（无 lazy） → 保存到 num 数组
+    // --------------------------------------------
+    void update_range(int i, int l, int r, int val)
+    {
+        if (tree[i].l >= l && tree[i].r <= r)
+        {
+            tree[i].num += val;
+            return;
+        }
+        int mid = (tree[i].l + tree[i].r) >> 1;
+        if (l <= mid)
+            update_range(i << 1, l, r, val);
+        if (r > mid)
+            update_range(i << 1 | 1, l, r, val);
+    }
+
+    // --------------------------------------------
+    // 单点查询（使用 num 数组溯源）
+    // --------------------------------------------
+    long long query_point(int i, int pos)
+    {
+        static long long s = 0; // 累加 num
+        s += tree[i].num;
+        if (tree[i].l == tree[i].r)
+            return s; // 到叶子
+        int mid = (tree[i].l + tree[i].r) >> 1;
+        if (pos <= mid)
+            return query_point(i << 1, pos);
+        else
+            return query_point(i << 1 | 1, pos);
+    }
+
+    // --------------------------------------------
+    // lazy 下推
+    // --------------------------------------------
+    void push_down(int i)
+    {
+        if (tree[i].lazy)
+        {
+            tree[i << 1].lazy += tree[i].lazy;
+            tree[i << 1 | 1].lazy += tree[i].lazy;
+
+            int mid = (tree[i].l + tree[i].r) >> 1;
+            tree[i << 1].sum += tree[i].lazy * (mid - tree[i << 1].l + 1);
+            tree[i << 1 | 1].sum += tree[i].lazy * (tree[i << 1 | 1].r - mid);
+
+            tree[i << 1].maxx += tree[i].lazy;
+            tree[i << 1 | 1].maxx += tree[i].lazy;
+
+            tree[i].lazy = 0;
+        }
+    }
+
+    // --------------------------------------------
+    // 带 lazy：区间加 k
+    // --------------------------------------------
+    void update_range_lazy(int i, int l, int r, long long k)
+    {
+        if (tree[i].l >= l && tree[i].r <= r)
+        {
+            tree[i].sum += k * (tree[i].r - tree[i].l + 1);
+            tree[i].maxx += k;
+            tree[i].lazy += k;
+            return;
+        }
+        push_down(i);
+
+        if (tree[i << 1].r >= l)
+            update_range_lazy(i << 1, l, r, k);
+        if (tree[i << 1 | 1].l <= r)
+            update_range_lazy(i << 1 | 1, l, r, k);
+
+        tree[i].sum = tree[i << 1].sum + tree[i << 1 | 1].sum;
+        tree[i].maxx = max(tree[i << 1].maxx, tree[i << 1 | 1].maxx);
+    }
+
+    // --------------------------------------------
+    // 带 lazy：区间查询 sum
+    // --------------------------------------------
+    long long query_sum_lazy(int i, int l, int r)
+    {
+        if (tree[i].l >= l && tree[i].r <= r)
+            return tree[i].sum;
+        if (tree[i].r < l || tree[i].l > r)
+            return 0;
+
+        push_down(i);
+        long long ans = 0;
+        if (tree[i << 1].r >= l)
+            ans += query_sum_lazy(i << 1, l, r);
+        if (tree[i << 1 | 1].l <= r)
+            ans += query_sum_lazy(i << 1 | 1, l, r);
+        return ans;
+    }
+
+    // --------------------------------------------
+    // 带 lazy：区间查询 max
+    // --------------------------------------------
+    long long query_max_lazy(int i, int l, int r)
+    {
+        if (tree[i].l >= l && tree[i].r <= r)
+            return tree[i].maxx;
+        if (tree[i].r < l || tree[i].l > r)
+            return -INF;
+
+        push_down(i);
+        long long ans = -INF;
+        if (tree[i << 1].r >= l)
+            ans = max(ans, query_max_lazy(i << 1, l, r));
+        if (tree[i << 1 | 1].l <= r)
+            ans = max(ans, query_max_lazy(i << 1 | 1, l, r));
+        return ans;
+    }
 };
-treeNode tree[2000005];
-int a[500005];
 
-void build(int i, int l, int r)
+SegTree st;
+int main()
 {
-    tree[i].l = l;
-    tree[i].r = r;
-    tree[i].num = 0;
-    if (l == r)
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    int n, m;
+    cin >> n >> m;
+    for (int i = 1; i <= n; i++)
+        cin >> st.a[i];
+    st.build(1, 1, n);
+    int op, l, r;
+    long long k;
+    while (m--)
     {
-        tree[i].sum = a[l];
-        tree[i].maxx = a[l];
-        tree[i].num = a[l];
-        return;
-    }
-    int mid = l + r >> 1;
-    build(i << 1, l, mid);
-    build(i << 1 | 1, mid + 1, r);
-    tree[i].sum = tree[i << 1].sum + tree[i << 1 | 1].sum;
-    tree[i].maxx = max(tree[i << 1].maxx, tree[i << 1 | 1].maxx);
-}
-
-int search_range_sum(int i, int l, int r)
-{
-    if (tree[i].l >= l && tree[i].r <= r)
-        return tree[i].sum;
-    int mid = tree[i].l + tree[i].r >> 1;
-    int ans = 0;
-    if (tree[i].r >= l)
-        ans += search_range_sum(i << 1, l, r);
-    if (tree[i].l <= r)
-        ans += search_range_sum(i << 1 | 1, l, r);
-    return ans;
-}
-
-int search_range_max(int i, int l, int r)
-{
-    if (tree[i].l >= l && tree[i].r <= r)
-        return tree[i].maxx;
-    int mid = tree[i].l + tree[i].r >> 1;
-    int ans = -INF;
-    if (tree[i].r >= l)
-        ans = max(ans, search_range_max(i << 1, l, r));
-    if (tree[i].l <= r)
-        ans = max(ans, search_range_max(i << 1 | 1, l, r));
-    return ans;
-}
-
-void update_point(int i, int x, int v)
-{
-    if (tree[i].l == tree[i].r)
-    {
-        tree[i].sum += v;
-        tree[i].maxx += v;
-        return;
-    }
-    if (x <= tree[i << 1].r)
-        update_point(i << 1, x, v);
-    else
-        update_point(i << 1 | 1, x, v);
-    tree[i].sum = tree[i << 1].sum + tree[i << 1 | 1].sum;
-    tree[i].maxx = max(tree[i << 1].maxx, tree[i << 1 | 1].maxx);
-}
-
-void update_range(int i, int l, int r, int v)
-{
-    if (tree[i].l >= l && tree[i].r <= r)
-    {
-        tree[i].num += v;
-        return;
-    }
-    int mid = tree[i].l + tree[i].r >> 1;
-    if (l <= mid)
-        update_range(i << 1, l, r, v);
-    if (r > mid)
-        update_range(i << 1 | 1, l, r, v);
-}
-
-int s = 0;
-void search_point(int i, int x)
-{
-    s += tree[i].num;
-    if (tree[i].l == tree[i].r)
-        return;
-    int mid = tree[i].l + tree[i].r >> 1;
-    if (x <= mid)
-        search_point(i << 1, x);
-    else
-        search_point(i << 1 | 1, x);
-}
-
-void push_down(int i)
-{
-    if (tree[i].lazy)
-    {
-        tree[i << 1].lazy += tree[i].lazy;
-        tree[i << 1 | 1].lazy += tree[i].lazy;
-        int mid = tree[i].l + tree[i].r >> 1;
-        tree[i << 1].sum += tree[i].lazy * (mid - tree[i << 1].l + 1);
-        tree[i << 1 | 1].sum += tree[i].lazy * (tree[i << 1 | 1].r - mid);
-        tree[i << 1].maxx += tree[i].lazy;
-        tree[i << 1 | 1].maxx += tree[i].lazy;
-        tree[i].lazy = 0;
-    }
-}
-
-void update_range_lazy(int i, int l, int r, int k)
-{
-    if (tree[i].l >= l && tree[i].r <= r)
-    {
-        tree[i].sum += k * (tree[i].r - tree[i].l + 1);
-        tree[i].maxx += k;
-        tree[i].lazy += k;
-        return;
-    }
-    push_down(i);
-    if (tree[i << 1].r >= l)
-        update_range_lazy(i << 1, l, r, k);
-    if (tree[i << 1 | 1].l <= r)
-        update_range_lazy(i << 1 | 1, l, r, k);
-    tree[i].sum = tree[i << 1].sum + tree[i << 1 | 1].sum;
-    tree[i].maxx = max(tree[i << 1].maxx, tree[i << 1 | 1].maxx);
-}
-
-int search_range_sum_lazy(int i, int l, int r)
-{
-    if (tree[i].l >= l && tree[i].r <= r)
-        return tree[i].sum;
-    if (tree[i].r < l || tree[i].l > r)
-        return 0;
-    push_down(i);
-    int ans = 0;
-    if (tree[i << 1].r >= l)
-        ans += search_range_sum_lazy(i << 1, l, r);
-    if (tree[i << 1 | 1].l <= r)
-        ans += search_range_sum_lazy(i << 1 | 1, l, r);
-    return ans;
-}
-
-int search_range_max_lazy(int i, int l, int r)
-{
-    if (tree[i].l >= l && tree[i].r <= r)
-        return tree[i].maxx;
-    if (tree[i].r < l || tree[i].l > r)
-        return -INF;
-    push_down(i);
-    int ans = -INF;
-    if (tree[i << 1].r >= l)
-        ans = max(ans, search_range_max_lazy(i << 1, l, r));
-    if (tree[i << 1 | 1].l <= r)
-        ans = max(ans, search_range_max_lazy(i << 1 | 1, l, r));
-    return ans;
-}
-
-void solve()
-{
-    int n, m, k;
-    cin >> n >> m >> k;
-    ff(i, 1, n + 1)
-    {
-        cin >> a[i];
-    }
-    build(1, 1, n);
-    ff(i, 1, m)
-    {
-        int op, l, r, x;
         cin >> op >> l >> r;
         if (op == 1)
         {
-            cin >> x;
-            update_range_lazy(1, l, r, x);
+            cin >> k;
+            st.update_range_lazy(1, l, r, k);
         }
-        else if (op == 2)
+        else
         {
-            cout << search_range_sum_lazy(1, l, r) << endl;
-        }
-        else if (op == 3)
-        {
-            cout << search_range_max_lazy(1, l, r) << endl;
-        }
-        else if (op == 4)
-        {
-            search_point(1, l);
-            cout << s << endl;
-            s = 0;
+            cout << st.query_sum_lazy(1, l, r) << endl;
         }
     }
+    return 0;
 }
+
 ```
 
 
