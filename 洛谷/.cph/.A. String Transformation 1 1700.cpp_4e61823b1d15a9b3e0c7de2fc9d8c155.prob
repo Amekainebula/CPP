@@ -1,0 +1,1 @@
+{"name":"Local: A","url":"d:\\vscode\\洛谷\\A. String Transformation 1 1700.cpp","tests":[{"id":1755944834022,"input":"5\n3\naab\nbcc\n4\ncabc\nabcb\n3\nabc\ntsr\n4\naabd\ncccd\n5\nabcbd\nbcdda\n","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\洛谷\\A. String Transformation 1 1700.cpp","group":"local","local":true}

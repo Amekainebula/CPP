@@ -1,0 +1,1 @@
+{"name":"Local: 04","url":"d:\\vscode\\春联\\no.2\\04.cpp","tests":[{"id":1741950050991,"input":"2\nabcdefg 4\ngfedcba 4","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\春联\\no.2\\04.cpp","group":"local","local":true}

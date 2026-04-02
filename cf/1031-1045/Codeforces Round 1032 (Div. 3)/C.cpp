@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+#define int long long
+#define ull unsigned long long
+#define i128 __int128
+#define ld long double
+#define ff(x, y, z) for (int(x) = (y); (x) <= (z); ++(x))
+#define ffg(x, y, z) for (int(x) = (y); (x) >= (z); --(x))
+#define pb push_back
+#define eb emplace_back
+#define pii pair<int, int>
+#define vc vector
+#define vi vector<int>
+#define vvi vector<vi>
+#define fi first
+#define se second
+#define all(x) x.begin(), x.end()
+#define all1(x) x.begin() + 1, x.end()
+#define INF 0x7fffffffffffffff
+#define inf 0x7fffffff
+// #define endl endl << flush
+#define endl '\n'
+#define WA AC
+#define TLE AC
+#define MLE AC
+#define RE AC
+#define CE AC
+using namespace std;
+const string AC = "Accepted";
+const int MOD = 1e9 + 7;
+const int mod = 998244353;
+const int N = 1e6 + 6;
+void Murasame()
+{
+    int n, m;
+    cin >> n >> m;
+    vvi a(n + 1, vi(m + 1));
+    int cnt = 0, mx = 0;
+    ff(i, 1, n) ff(j, 1, m)
+    {
+        cin >> a[i][j];
+        if (a[i][j] > mx)
+        {
+            cnt = 1;
+            mx = a[i][j];
+        }
+        else if (a[i][j] == mx)
+        {
+            cnt++;
+        }
+    }
+    vi r(n + 1), c(m + 1);
+    ff(i, 1, n) ff(j, 1, m)
+    {
+        if (a[i][j] == mx)
+        {
+            r[i]++;
+            c[j]++;
+        }
+    }
+    int flag = 0;
+    ff(i, 1, n) ff(j, 1, m)
+    {
+        if (r[i] + c[j] - (a[i][j] == mx) == cnt)
+        {
+            flag = 1;
+        }
+    }
+
+    cout << mx - flag << '\n';
+}
+signed main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    int _T = 1;
+    //
+    cin >> _T;
+    while (_T--)
+    {
+        Murasame();
+    }
+    return 0;
+}

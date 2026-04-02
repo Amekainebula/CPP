@@ -1,0 +1,1 @@
+{"name":"Local: G","url":"d:\\vscode\\牛客\\2025年华为杯广东工业大学程序设计竞赛（同步赛）\\G.cpp","tests":[{"id":1743315609836,"input":"4\n3 2 1 4","output":"2\r\n"},{"id":1743315836651,"input":"4\n1 2 3 4\n","output":"4\r\n"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\牛客\\2025年华为杯广东工业大学程序设计竞赛（同步赛）\\G.cpp","group":"local","local":true}

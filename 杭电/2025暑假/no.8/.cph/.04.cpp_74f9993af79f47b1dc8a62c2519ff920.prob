@@ -1,0 +1,1 @@
+{"name":"Local: 04","url":"d:\\vscode\\杭电\\2025暑假\\no.8\\04.cpp","tests":[{"id":1754898644575,"input":"2\n5 3\n1 2 3 4 5\n5 4 3 2 1\n5 2\n1 1 4 5 1\n1 2 3 4 5","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\杭电\\2025暑假\\no.8\\04.cpp","group":"local","local":true}

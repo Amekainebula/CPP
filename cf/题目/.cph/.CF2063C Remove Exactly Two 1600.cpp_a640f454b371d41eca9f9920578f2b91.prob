@@ -1,0 +1,1 @@
+{"name":"Local: CF2063C Remove Exactly Two 1600","url":"d:\\vscode\\cf\\题目\\CF2063C Remove Exactly Two 1600.cpp","tests":[{"id":1775053725374,"input":"3\n2\n1 2\n4\n1 2\n2 3\n2 4\n7\n1 2\n1 3\n2 4\n4 5\n5 6\n5 7\n","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\cf\\题目\\CF2063C Remove Exactly Two 1600.cpp","group":"local","local":true}

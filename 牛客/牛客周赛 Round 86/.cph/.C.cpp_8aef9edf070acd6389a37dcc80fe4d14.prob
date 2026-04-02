@@ -1,0 +1,1 @@
+{"name":"Local: C","url":"d:\\vscode\\牛客\\牛客周赛 Round 86\\C.cpp","tests":[{"id":1742728545740,"input":"2\n7\n0101110\n4\n0000","output":"2\n0"},{"id":1742728969221,"input":"3\n5\n10101\n4\n1100\n7\n0100101","output":"2\r\n0\r\n0\r\n"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\牛客\\牛客周赛 Round 86\\C.cpp","group":"local","local":true}

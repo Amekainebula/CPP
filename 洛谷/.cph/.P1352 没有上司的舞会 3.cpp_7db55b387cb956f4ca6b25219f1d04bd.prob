@@ -1,0 +1,1 @@
+{"name":"Local: P1352 没有上司的舞会 3","url":"d:\\vscode\\洛谷\\P1352 没有上司的舞会 3.cpp","tests":[{"id":1742213383630,"input":"7\n1\n1\n1\n1\n1\n1\n1\n1 3\n2 3\n6 4\n7 4\n4 5\n3 5\n","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\洛谷\\P1352 没有上司的舞会 3.cpp","group":"local","local":true}

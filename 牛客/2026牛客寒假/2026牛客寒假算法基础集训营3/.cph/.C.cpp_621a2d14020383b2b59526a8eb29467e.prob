@@ -1,0 +1,1 @@
+{"name":"Local: C","url":"d:\\vscode\\牛客\\2026牛客寒假\\2026牛客寒假算法基础集训营3\\C.cpp","tests":[{"id":1770448741323,"input":"1\n1\n111010101011111010101010","output":""},{"id":1770450114251,"input":"2\n5\n11101\n5\n11100","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\牛客\\2026牛客寒假\\2026牛客寒假算法基础集训营3\\C.cpp","group":"local","local":true}

@@ -1,0 +1,1 @@
+{"name":"Local: D","url":"d:\\vscode\\牛客\\牛客暑假多校\\no.10\\D.cpp","tests":[{"id":1755144617727,"input":"3\n4\n0 1 0 1\n4\n1 0 1 0 \n16\n1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\牛客\\牛客暑假多校\\no.10\\D.cpp","group":"local","local":true}

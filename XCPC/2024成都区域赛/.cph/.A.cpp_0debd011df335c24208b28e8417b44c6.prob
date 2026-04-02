@@ -1,0 +1,1 @@
+{"name":"Local: A","url":"d:\\vscode\\XCPC\\2024成都区域赛\\A.cpp","tests":[{"id":1747887839383,"input":"6\n>>->>>\n>>>->\n>>>>>\n>->>>>>>\n>>>--->>>>--->>>>>\n>>->->->->>>>>>>>>>>","output":""},{"id":1747889006078,"input":"","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\XCPC\\2024成都区域赛\\A.cpp","group":"local","local":true}

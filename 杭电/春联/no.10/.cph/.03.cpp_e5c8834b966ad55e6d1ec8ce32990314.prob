@@ -1,0 +1,1 @@
+{"name":"Local: 03","url":"d:\\vscode\\春联\\no.10\\03.cpp","tests":[{"id":1747396802084,"input":"100","output":""},{"id":1747398146656,"input":"2\n6\n1 2 3 4 5 6\n3\n1 2 3","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\春联\\no.10\\03.cpp","group":"local","local":true}

@@ -1,0 +1,1 @@
+{"name":"Local: B","url":"d:\\vscode\\牛客\\河南萌新联赛2025第2场\\B.cpp","tests":[{"id":1753248023666,"input":"1\n1 10 5","output":"2"},{"id":1753257475301,"input":"1\n1 9 5","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\牛客\\河南萌新联赛2025第2场\\B.cpp","group":"local","local":true}

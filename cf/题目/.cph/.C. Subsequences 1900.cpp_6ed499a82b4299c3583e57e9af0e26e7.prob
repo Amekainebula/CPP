@@ -1,0 +1,1 @@
+{"name":"Local: C","url":"d:\\vscode\\cf\\C. Subsequences 1900.cpp","tests":[{"id":1741324085715,"input":"5 2\n1\n2\n3\n5\n4\n","output":"7\r\n"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\cf\\C. Subsequences 1900.cpp","group":"local","local":true}

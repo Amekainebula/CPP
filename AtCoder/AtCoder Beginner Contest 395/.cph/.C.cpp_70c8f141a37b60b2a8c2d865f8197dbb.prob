@@ -1,0 +1,1 @@
+{"name":"Local: C","url":"d:\\vscode\\AtCoder\\AtCoder Beginner Contest 395\\C.cpp","tests":[{"id":1740831448930,"input":"5\n3 9 5 3 1\n","output":"4\n"},{"id":1740831464165,"input":"4\n2 5 3 1\n","output":"-1\n"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\AtCoder\\AtCoder Beginner Contest 395\\C.cpp","group":"local","local":true}

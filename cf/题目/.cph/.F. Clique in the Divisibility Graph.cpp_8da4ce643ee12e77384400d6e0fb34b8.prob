@@ -1,0 +1,1 @@
+{"name":"Local: F","url":"d:\\vscode\\cf\\F. Clique in the Divisibility Graph.cpp","tests":[{"id":1740997174289,"input":"8\n3 4 6 8 10 18 21 24\n","output":"3\n"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\cf\\F. Clique in the Divisibility Graph.cpp","group":"local","local":true}

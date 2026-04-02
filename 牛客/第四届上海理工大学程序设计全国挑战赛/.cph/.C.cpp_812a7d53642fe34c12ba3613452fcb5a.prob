@@ -1,0 +1,1 @@
+{"name":"Local: C","url":"d:\\vscode\\牛客\\第四届上海理工大学程序设计全国挑战赛\\C.cpp","tests":[{"id":1742457003127,"input":"5\n2 1 1\n3 1 2\n5 1 4\n8 1 7\n11 1 10","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\牛客\\第四届上海理工大学程序设计全国挑战赛\\C.cpp","group":"local","local":true}

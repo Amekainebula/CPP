@@ -1,0 +1,1 @@
+{"name":"Local: CF1406C Link Cut Centroids 1700","url":"d:\\vscode\\cf\\题目\\CF1406C Link Cut Centroids 1700.cpp","tests":[{"id":1758107977520,"input":"2\n5\n1 2\n1 3\n2 4\n2 5\n6\n1 2\n1 3\n1 4\n2 5\n2 6\n","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\cf\\题目\\CF1406C Link Cut Centroids 1700.cpp","group":"local","local":true}

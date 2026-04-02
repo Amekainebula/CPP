@@ -1,0 +1,81 @@
+#include <bits/stdc++.h>
+#define int long long
+#define i128 __int128
+#define ld long double
+#define ull unsigned long long
+#define ff(x, y, z) for (int(x) = (y); (x) <= (z); ++(x))
+#define ffg(x, y, z) for (int(x) = (y); (x) >= (z); --(x))
+#define lowbit(x) (x & -x)
+#define pb push_back
+#define eb emplace_back
+#define pii pair<int, int>
+#define mpr make_pair
+#define fi first
+#define se second
+#define all(x) x.begin(), x.end()
+#define rall(x) x.rbegin(), x.rend()
+#define sz(x) (int)(x).size()
+#define INF 0x7fffffffffffffff
+#define endl '\n'
+#define WA AC
+#define TLE AC
+#define MLE AC
+#define RE AC
+#define CE AC
+using namespace std;
+const string AC = "Accepted";
+int n, m;
+vector<int> g[200005];
+vector<bool> vis(200005, 0);
+vector<int> cnt(200005, 0);
+vector<int> ll(200005.0);
+vector<int> in(200005);
+int ans = -0x7fffffff;
+void dfs(int u)
+{
+    vis[u] = 1;
+    for (int v : g[u])
+    {
+        ll[v] = max(ll[v], ll[u] + 1);
+        in[v]--;
+        if (!vis[v] && in[v] == 0)
+            dfs(v);
+    }
+}
+void solve()
+{
+    cin >> n >> m;
+    while (m--)
+    {
+        int u, v;
+        cin >> u >> v;
+        g[min(u, v)].pb(max(u, v));
+        cnt[u]++, cnt[v]++;
+        in[max(u, v)]++;
+    }
+
+    for (int i = 1; i <= n; i++)
+    {
+        if (!vis[i])
+        {
+            ll[i] = 1;
+            dfs(i);
+        }
+    }
+    ff(i, 1, n)
+        ans = max(ans, cnt[i] * ll[i]);
+    cout << ans << endl;
+}
+signed main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    int T = 1;
+    // cin >> T;
+    while (T--)
+    {
+        solve();
+    }
+    return 0;
+}

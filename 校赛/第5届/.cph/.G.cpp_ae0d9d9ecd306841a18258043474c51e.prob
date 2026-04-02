@@ -1,0 +1,1 @@
+{"name":"Local: G","url":"d:\\vscode\\校赛\\第5届\\G.cpp","tests":[{"id":1741613006407,"input":"3 120 50\n500 2 150 6 1\n1000 4 300 12 2\n1500 6 450 120 3","output":"1266"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\校赛\\第5届\\G.cpp","group":"local","local":true}

@@ -1,0 +1,1 @@
+{"name":"Local: B","url":"d:\\vscode\\cf\\Educational Codeforces Round 181 (Rated for Div. 2)\\B.cpp","tests":[{"id":1753195698808,"input":"4\n3 5 15\n2 3 1\n12 18 8\n9 7 5\n","output":"1\n2\n1\n2"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\cf\\Educational Codeforces Round 181 (Rated for Div. 2)\\B.cpp","group":"local","local":true}

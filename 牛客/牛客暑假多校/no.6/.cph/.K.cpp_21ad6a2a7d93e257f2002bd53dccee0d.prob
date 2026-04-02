@@ -1,0 +1,1 @@
+{"name":"Local: K","url":"d:\\vscode\\牛客\\牛客暑假多校\\no.6\\K.cpp","tests":[{"id":1754101294544,"input":"5\n2\n114 514\n1\n2\n5\n1 2 3 5 8\n5\n4 3 3 3 4\n5\n6 1 4 7 9","output":"514\n0\n1\n4\n3"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\牛客\\牛客暑假多校\\no.6\\K.cpp","group":"local","local":true}

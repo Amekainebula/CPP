@@ -1,0 +1,1 @@
+{"name":"Local: E","url":"d:\\vscode\\cf\\Educational Codeforces Round 178 (Rated for Div. 2)\\E.cpp","tests":[{"id":1745911149705,"input":"7 3\nabacaba\n3\ncc\nbcb\nb\n","output":"0\n1\n2\n"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\cf\\Educational Codeforces Round 178 (Rated for Div. 2)\\E.cpp","group":"local","local":true}

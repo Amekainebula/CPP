@@ -1,0 +1,1 @@
+{"name":"Local: C","url":"d:\\vscode\\AtCoder\\abc430\\C.cpp","tests":[{"id":1762341934617,"input":"11 4 2\nabbaaabaaba\n","output":"3"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\AtCoder\\abc430\\C.cpp","group":"local","local":true}

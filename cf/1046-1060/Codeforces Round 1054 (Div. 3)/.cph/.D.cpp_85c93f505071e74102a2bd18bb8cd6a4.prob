@@ -1,0 +1,1 @@
+{"name":"Local: D","url":"d:\\vscode\\cf\\1046-1060\\Codeforces Round 1054 (Div. 3)\\D.cpp","tests":[{"id":1759336891628,"input":"5\n4\nabab\n6\nbababa\n7\nabababa\n2\nab\n1\nb\n","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\cf\\1046-1060\\Codeforces Round 1054 (Div. 3)\\D.cpp","group":"local","local":true}

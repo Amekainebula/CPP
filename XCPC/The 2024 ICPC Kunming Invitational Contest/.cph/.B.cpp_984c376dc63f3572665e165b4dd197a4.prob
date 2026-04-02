@@ -1,0 +1,1 @@
+{"name":"Local: B","url":"d:\\vscode\\XCPC\\The 2024 ICPC Kunming Invitational Contest\\B.cpp","tests":[{"id":1774413405411,"input":"2\n3 10\n239 141 526\n6\n2 1\n300 100\n1000\n","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\vscode\\XCPC\\The 2024 ICPC Kunming Invitational Contest\\B.cpp","group":"local","local":true}
